@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./img/stiker.png" />
+    <title>Alt Coyote</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .bg1 {
+            background:#CC5803;
+        }
+        .bg {
+            background: linear-gradient(to right, #CC5803, #1a0e05);
+        }
+        body {
+            background: linear-gradient(to right, #CC5803, #1a0e05);
+        }
+        .titulo {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #CC5803; 
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px; 
+            position: relative;
+            text-shadow: 
+                -1px -1px 0 #FFFFFF,  
+                1px -1px 0 #FFFFFF,
+                -1px  1px 0 #FFFFFF,
+                1px  1px 0 #FFFFFF, 
+                -1px  0px 0 #FFFFFF,
+                1px  0px 0 #FFFFFF,
+                0px -1px 0 #FFFFFF,
+                0px  1px 0 #FFFFFF; 
+        }
+        .titulo::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 4px; 
+            background-color: #CC5803; 
+            margin: 10px auto 0 auto; 
+            border-radius: 2px; 
+        }
+        .productos {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 20px;
+            width: 75%;
+            justify-content: space-around;
+        }
+        .producto {
+            text-align: center;
+            border: 1px solid #ddd;
+            padding: 6px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto; 
+        }
+        .producto:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #f8f8f8;
+        }
+        .producto img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .producto p {
+            margin: 5px 0;
+        }
+        .producto .compra-rapida {
+            background-color: #cc5803;
+            color: white;
+            padding: 10px;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+            border-radius: 5px;
+        }
+        .producto .compra-rapida:hover {
+            background-color: #1f1300;
+        }
+        @media (max-width: 768px) {
+            .productos {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .producto {
+                max-width: 100%; 
+            }
+        }
+        @media (max-width: 480px) {
+            .productos {
+                grid-template-columns: 1fr; 
+            }
+            .producto {
+                max-width: 100%; 
+            }
+        }
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 999; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5); 
+            padding-top: 50px;
+            text-align: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .close {
+            color: #aaa;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+        .modal-body {
+            font-size: 1rem;
+            color: #555;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .modal-footer a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 5px;
+            color: #fff;
+            background-color: #CC5803;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .modal-footer a:hover {
+            background-color: #1a0e05;
+        }
+
+        /* Estilos adicionales para las reseñas */
+        .review-container {
+            margin-top: 20px;
+        }
+
+        .review {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            transition: transform 0.2s;
+        }
+
+        .review:hover {
+            transform: translateY(-2px);
+        }
+
+        .review .stars {
+            color: #ffd700;
+            font-size: 1.2rem;
+        }
+
+        .review .name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .review .comment {
+            color: #555;
+        }
+
+        .form-review {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-review input,
+        .form-review textarea,
+        .form-review select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-review button {
+            background-color: #CC5803;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-review button:hover {
+            background-color: #1f1300;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg">
+        <div class="container mx-auto flex items-center justify-between">
+            <a class="navbar-brand text-white font-bold btn btn-ghost" href="./about.html">
+                <svg xmlns="http://www.w3.org/2000/svg" height="32" width="36" viewBox="0 0 576 512">
+                    <path fill="#ffffff" d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/>
+                  </svg>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+            <img src="./img/stiker.png" alt="Logo" width="50" height="60">
+            <a class="navbar-brand text-white font-bold btn btn-ghost" href="./pagina inicio.html">Alt coyote</a>
+            <button class="navbar-toggler flex items-center" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- Icono de menú (Hamburger) -->
+                <svg class="block h-6 w-6 text-white lg:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto flex space-x-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-white font-bold btn btn-ghost" href="./catalogo.html">Catálogo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white font-bold btn btn-ghost" href="./registro.html">Mi cuenta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white font-bold btn btn-ghost" href="#" id="hacerPedidoBtn">Hacer pedido</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <a href="./pagina inicio.html" class="inline-block bg-gray-800 text-white font-bold py-2 px-4 btn btn-ghost rounded">
+        &larr; Regresar
+      </a>
+    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-8">
+        <div class="flex">
+            <!-- Galería de Imágenes -->
+            <div class="w-1/3 flex flex-col p-4">
+                <img src="./img/PlumaDigitalNe.jpeg" alt="Imagen Principal" class="w-full h-48 mb-2 object-cover rounded">
+            </div>
+
+            <!-- Detalles del Producto -->
+            <div class="w-2/3 p-6">
+                <h1 class="text-2xl font-bold mb-4">  Pluma tactil</h1>
+                <p class="text-gray-700 mb-4">Pluma táctil para celular o tablet con protector para pantalla.</p>
+                <p class="text-gray-600 text-lg mb-4">
+                    Precio: <span class="text-red-500 font-semibold">$49 MXN</span>
+                </p>
+
+                <div class="mb-6">
+                    <label for="quantity" class="text-gray-600">Cantidad:</label>
+                    <input id="quantity" type="number" value="1" min="1"
+                        class="border border-gray-300 rounded p-2 w-16 ml-2">
+                </div>
+
+                <button class="bg1 text-white font-bold px-6 py-3 rounded"
+                    onclick="apartarArticulo('Pluma digital')">
+                    Apartarlo
+                </button>
+            </div>
+        </div>
+
+        <!-- Sección de Reseñas -->
+        <div class="p-6 border-t mt-6">
+            <h2 class="text-xl font-bold mb-4">Reseñas</h2>
+
+            <!-- Contenedor de Reseñas -->
+            <div id="reviewContainer" class="review-container">
+                <!-- Reseñas agregadas por el usuario aparecerán aquí -->
+            </div>
+
+            <!-- Formulario para añadir una reseña -->
+            <div class="mt-6 form-review">
+                <h3 class="text-lg font-semibold mb-4">Añadir una reseña</h3>
+                <form id="reviewForm">
+                    <div class="mb-4">
+                        <label for="nombre" class="block text-gray-700">Nombre:</label>
+                        <input type="text" id="nombre" class="border border-gray-300 rounded p-2 w-full" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="rating" class="block text-gray-700">Calificación:</label>
+                        <select id="rating" class="border border-gray-300 rounded p-2 w-full" required>
+                            <option value="5">5 - Excelente</option>
+                            <option value="4">4 - Muy bueno</option>
+                            <option value="3">3 - Bueno</option>
+                            <option value="2">2 - Regular</option>
+                            <option value="1">1 - Malo</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="comentario" class="block text-gray-700">Comentario:</label>
+                        <textarea id="comentario" rows="4" class="border border-gray-300 rounded p-2 w-full" required></textarea>
+                    </div>
+                    <button type="submit" class="bg1 text-white font-bold px-6 py-3 rounded">Enviar reseña</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Escuchar el envío del formulario de reseñas
+        document.getElementById('reviewForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Obtener valores de los campos del formulario
+            const nombre = document.getElementById('nombre').value;
+            const rating = document.getElementById('rating').value;
+            const comentario = document.getElementById('comentario').value;
+
+            // Crear elemento de reseña
+            const reviewDiv = document.createElement('div');
+            reviewDiv.classList.add('review');
+
+            const stars = Array(parseInt(rating)).fill('<i class="fas fa-star"></i>').join('');
+
+            reviewDiv.innerHTML = `
+                <div class="stars">${stars}</div>
+                <p class="name">${nombre}</p>
+                <p class="comment">${comentario}</p>
+            `;
+
+            // Agregar reseña al contenedor
+            document.getElementById('reviewContainer').appendChild(reviewDiv);
+
+            // Limpiar el formulario
+            document.getElementById('reviewForm').reset();
+        });
+        function apartarArticulo(productName) {
+    alert(productName + ' se te enviará al chat de WhatsApp al número 871 522 7723 para apartar el producto.');
+    window.open('https://wa.me/5218715227723?text=Hola,%20me%20gustaría%20apartar%20el%20producto:%20' + encodeURIComponent(productName), '_blank');
+}
+
+    </script>
+</body>
+
+</html>
